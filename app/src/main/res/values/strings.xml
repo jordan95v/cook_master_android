@@ -2,4 +2,6 @@
     <string name="app_name">cook_master_android</string>
     <string name="enter_username">Entrez votre nom d\'utilisateur</string>
     <string name="enter_password">Entrez votre mot de passe</string>
+    <string name="login">Se connecter</string>
+    <string name="register">Créer un compte</string>
 </resources>

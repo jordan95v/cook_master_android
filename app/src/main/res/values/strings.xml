@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">cook_master_android</string>
+    <string name="enter_username">Entrez votre nom d\'utilisateur</string>
+    <string name="enter_password">Entrez votre mot de passe</string>
+</resources>

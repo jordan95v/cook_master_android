@@ -12,4 +12,6 @@
     <string name="godfather_key">Godgather\'s key</string>
     <string name="confirm_password">Confirm password</string>
     <string name="already_registered">Already have an account ?</string>
+    <string name="field_cannot_be_empty">This field is required</string>
+    <string name="password_no_match">Passwords don\'t match</string>
 </resources>

@@ -11,4 +11,6 @@
     <string name="godfather_key">Clé de parrainage</string>
     <string name="confirm_password">Confirmez le mot de passe</string>
     <string name="already_registered">Vous avez déjà un compte ?</string>
+    <string name="field_cannot_be_empty">Ce champ est requis</string>
+    <string name="password_no_match">Les mots de passe ne correspondent pas</string>
 </resources>

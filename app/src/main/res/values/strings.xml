@@ -4,4 +4,6 @@
     <string name="enter_password">Entrez votre mot de passe</string>
     <string name="login">Se connecter</string>
     <string name="register">Créer un compte</string>
+    <string name="dont_have_account">Pas encore de compte ?</string>
+    <string name="invalid_credentials">Informations de connexion invalides</string>
 </resources>

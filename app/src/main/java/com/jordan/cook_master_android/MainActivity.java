@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         /* Call the API. */
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://kavita.jordan95v.fr/api/v1/login";
+        String url = BuildConfig.API_URL + "login";
         JSONObject body = this.create_body();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body, response -> {
             String answer = response.toString();

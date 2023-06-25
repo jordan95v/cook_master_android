@@ -3,6 +3,10 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
+
     namespace 'com.jordan.cook_master_android'
     compileSdk 33
 
@@ -17,9 +21,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "API_URL", "\"https://kavita.jordan95v.fr/api/v1/\""
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_URL", "\"https://kavita.jordan95v.fr/api/v1/\""
         }
     }
     compileOptions {

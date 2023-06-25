@@ -16,12 +16,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-
     EditText username_field;
     EditText password_field;
     TextView invalid_credentials;
 
     private boolean check_input_are_not_empty() {
+        /* Check if the input are not empty. */
+
         int error_count = 0;
         if (this.username_field.getText().toString().isEmpty()) {
             this.username_field.setError("Username cannot be empty");
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private JSONObject create_body() {
+        /* Create the body to send. */
+
         JSONObject body = new JSONObject();
         try {
             body.put("email", this.username_field.getText().toString());
@@ -46,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void call_api() {
+        /* Call the API. */
+
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://kavita.jordan95v.fr/api/v1/login";
         JSONObject body = this.create_body();
@@ -64,9 +69,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.invalid_credentials = findViewById(R.id.invalid_credentials);
+
+        /* This handle the login. */
         Button login_button = findViewById(R.id.login_button);
         login_button.setOnClickListener(v -> {
-            this.invalid_credentials.setVisibility(TextView.INVISIBLE);
+            this.invalid_credentials.setVisibility(TextView.GONE);
             this.username_field = findViewById(R.id.username_field);
             this.password_field = findViewById(R.id.password_field);
             if (this.check_input_are_not_empty()) {

@@ -7,6 +7,19 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <!-- Error message -->
+    <TextView
+        android:id="@+id/invalid_credentials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/red"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/invalid_credentials"
+        android:visibility="gone" />
+
     <!-- The logo -->
     <ImageView
         android:layout_width="match_parent"
@@ -18,17 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:orientation="vertical">
-
-        <!-- Error message -->
-        <TextView
-            android:id="@+id/invalid_credentials"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:padding="10dp"
-            android:gravity="center"
-            android:text="@string/invalid_credentials"
-            android:visibility="gone" />
 
         <!--Two fields used to connect -->
         <EditText

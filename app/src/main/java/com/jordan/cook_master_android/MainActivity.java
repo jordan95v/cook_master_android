@@ -16,7 +16,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    EditText username_field;
+    EditText email_field;
     EditText password_field;
     TextView invalid_credentials;
 
@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         /* Check if the input are not empty. */
 
         int error_count = 0;
-        if (this.username_field.getText().toString().isEmpty()) {
-            this.username_field.setError("Username cannot be empty");
+        if (this.email_field.getText().toString().isEmpty()) {
+            this.email_field.setError("Username cannot be empty");
             error_count++;
         }
         if (this.password_field.getText().toString().isEmpty()) {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         JSONObject body = new JSONObject();
         try {
-            body.put("email", this.username_field.getText().toString());
+            body.put("email", this.email_field.getText().toString());
             body.put("password", this.password_field.getText().toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,14 +68,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /* Get the input. */
+        this.email_field = findViewById(R.id.email_field);
+        this.password_field = findViewById(R.id.password_field);
         this.invalid_credentials = findViewById(R.id.invalid_credentials);
 
         /* This handle the login. */
         Button login_button = findViewById(R.id.login_button);
         login_button.setOnClickListener(v -> {
             this.invalid_credentials.setVisibility(TextView.GONE);
-            this.username_field = findViewById(R.id.username_field);
-            this.password_field = findViewById(R.id.password_field);
             if (this.check_input_are_not_empty()) {
                 this.call_api();
             }

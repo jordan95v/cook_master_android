@@ -16,14 +16,16 @@
         android:layout_marginTop="10dp"
         android:background="@color/red"
         android:gravity="center"
-        android:padding="10dp"
+        android:padding="15dp"
         android:text="@string/invalid_credentials"
+        android:textSize="18sp"
         android:visibility="gone" />
 
     <!-- The logo -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="329dp"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/logo" />
 
     <LinearLayout

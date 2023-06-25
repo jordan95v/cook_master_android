@@ -7,4 +7,9 @@
     <string name="register">Register</string>
     <string name="dont_have_account">No account yet ?</string>
     <string name="invalid_credentials">Bad credentials</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="godfather_key">Godgather\'s key</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="already_registered">Already have an account ?</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.jordan.cook_master_android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
             if (this.check_input_are_not_empty()) {
                 this.call_api();
             }
+        });
+
+        /* This handle the register. */
+        Button register_button = findViewById(R.id.register_button);
+        register_button.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 }

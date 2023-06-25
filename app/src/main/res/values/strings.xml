@@ -6,4 +6,9 @@
     <string name="register">Créer un compte</string>
     <string name="dont_have_account">Pas encore de compte ?</string>
     <string name="invalid_credentials">Informations de connexion invalides</string>
+    <string name="email">Adresse mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="godfather_key">Clé de parrainage</string>
+    <string name="confirm_password">Confirmez le mot de passe</string>
+    <string name="already_registered">Vous avez déjà un compte ?</string>
 </resources>

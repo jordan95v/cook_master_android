@@ -1,6 +1,7 @@
 package com.jordan.cook_master_android;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,12 +15,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     EditText email_field;
     EditText password_field;
     TextView invalid_credentials;
+    private boolean call_success = false;
 
     private boolean check_input_are_not_empty() {
         /* Check if the input are not empty. */
@@ -56,8 +59,18 @@ public class MainActivity extends AppCompatActivity {
         String url = BuildConfig.API_URL + "login";
         JSONObject body = this.create_body();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body, response -> {
-            String answer = response.toString();
-            Toast.makeText(this, answer, Toast.LENGTH_LONG).show();
+            String api_key = null;
+            try {
+                api_key = response.getString("key");
+            } catch (JSONException e) {
+                this.invalid_credentials.setText(R.string.error_happened);
+                return;
+            }
+            SharedPreferences preferences = this.getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("api_key", api_key);
+            editor.apply();
+            this.call_success = true;
         }, error -> {
             this.invalid_credentials.setVisibility(TextView.VISIBLE);
         });
@@ -80,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
             this.invalid_credentials.setVisibility(TextView.GONE);
             if (this.check_input_are_not_empty()) {
                 this.call_api();
+                if (this.call_success) {
+                    Intent intent = new Intent(this, FormationActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

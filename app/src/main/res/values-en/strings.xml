@@ -16,4 +16,7 @@
     <string name="password_no_match">Passwords don\'t match</string>
     <string name="username">Username</string>
     <string name="error_happened">An error occured, try again later</string>
+    <string name="formations">Formations</string>
+    <string name="user_profile">Profile</string>
+    <string name="courses">Courses</string>
 </resources>

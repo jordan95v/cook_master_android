@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/formations"
+        android:enabled="true"
+        android:icon="@drawable/education"
+        android:title="@string/formations" />
+
+    <item
+        android:id="@+id/courses"
+        android:enabled="true"
+        android:icon="@drawable/book"
+        android:title="@string/courses" />
+
+    <item
+        android:id="@+id/user_profile"
+        android:enabled="true"
+        android:icon="@drawable/user"
+        android:title="@string/user_profile" />
+</menu>

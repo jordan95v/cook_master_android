@@ -1,10 +1,10 @@
 package com.jordan.cook_master_android;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +27,14 @@ public class RegisterActivity extends AppCompatActivity {
     EditText confirm_password_field;
     EditText godfather_key_field;
     TextView errors;
+    boolean call_success = false;
+
+    private void set_error(String error) {
+        /* Set the error message. */
+
+        this.errors.setText(error);
+        this.errors.setVisibility(TextView.VISIBLE);
+    }
 
     private boolean check_fields() {
         /* Check if the fields are not empty. */
@@ -71,8 +79,18 @@ public class RegisterActivity extends AppCompatActivity {
         String url = BuildConfig.API_URL + "register";
         JSONObject body = this.create_body();
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body, response -> {
-            String answer = response.toString();
-            Toast.makeText(this, answer, Toast.LENGTH_LONG).show();
+            String api_key = null;
+            try {
+                api_key = response.getString("key");
+            } catch (JSONException e) {
+                this.set_error(getResources().getText(R.string.error_happened).toString());
+                return;
+            }
+            SharedPreferences preferences = this.getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("api_key", api_key);
+            editor.apply();
+            this.call_success = true;
         }, error -> {
             try {
                 JSONObject ret = new JSONObject(new String(error.networkResponse.data, StandardCharsets.UTF_8));
@@ -81,10 +99,9 @@ public class RegisterActivity extends AppCompatActivity {
                 for (int i = 0; i < errors.length(); i++) {
                     errors_str.append("- ").append(errors.getString(i)).append("\n");
                 }
-                this.errors.setText(errors_str.toString());
-                this.errors.setVisibility(TextView.VISIBLE);
+                this.set_error(errors_str.toString());
             } catch (JSONException e) {
-                throw new RuntimeException(e);
+                this.set_error(getResources().getText(R.string.error_happened).toString());
             }
         });
         queue.add(request);
@@ -112,8 +129,10 @@ public class RegisterActivity extends AppCompatActivity {
         Button register_button = findViewById(R.id.register_button);
         register_button.setOnClickListener(v -> {
             if (this.check_fields()) {
-                this.errors.setVisibility(TextView.GONE);
                 this.call_api();
+                if (this.call_success) {
+                    this.finish();
+                }
             }
         });
     }

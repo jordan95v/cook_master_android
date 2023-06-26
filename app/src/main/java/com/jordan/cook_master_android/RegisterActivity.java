@@ -1,5 +1,6 @@
 package com.jordan.cook_master_android;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -131,7 +132,8 @@ public class RegisterActivity extends AppCompatActivity {
             if (this.check_fields()) {
                 this.call_api();
                 if (this.call_success) {
-                    this.finish();
+                    Intent intent = new Intent(this, FormationActivity.class);
+                    startActivity(intent);
                 }
             }
         });

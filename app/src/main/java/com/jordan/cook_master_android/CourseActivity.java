@@ -12,10 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,37 +25,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+public class CourseActivity extends AppCompatActivity {
 
-public class FormationActivity extends AppCompatActivity {
-    private ListView listViewFormations;
-    private List<Formation> formations;
+    private ListView listViewCourses;
+    private List<Course> Courses;
+
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_formations);
+        setContentView(R.layout.activity_courses);
 
         // Récupérer la ListView depuis le layout XML
-        listViewFormations = findViewById(R.id.list_formations);
+        listViewCourses = findViewById(R.id.list_courses);
 
-        getFormations();
-
-        // Créer le listener pour la navigation
-        listViewFormations.setOnItemClickListener((parent, view, position, id) -> {
-            // Récupérer la formation sélectionnée
-            Formation selectedFormation = formations.get(position);
-
-            // Récupérer l'ID de la formation
-            int formationId = position + 1; // Suppose que l'ID de la formation est basé sur la position dans la liste
-
-            // Lancer une nouvelle activité pour afficher le contenu de la formation
-            Intent intent = new Intent(FormationActivity.this, FormationContentActivity.class);
-            intent.putExtra("formation_id", formationId);
-            startActivity(intent);
-        });
-
-
+        getCourses();
 
         BottomNavigationView navbar = findViewById(R.id.bottom_navigation);
         navbar.setOnItemSelectedListener(item -> {
@@ -73,51 +59,52 @@ public class FormationActivity extends AppCompatActivity {
         });
     }
 
-    private void getFormations() {
+    private void getCourses() {
         // Récupérer l'API key depuis les préférences partagées
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String apiKey = preferences.getString("api_key", "");
 
 
         // Créer l'URL de la requête GET
-        String url = BuildConfig.API_URL + "formations";
+        String url = BuildConfig.API_URL + "courses";
 
         // Créer les en-têtes de la requête avec l'API key
         Map<String, String> headers = new HashMap<>();
         headers.put("API-KEY",  apiKey);
 
         // Créer la requête GET
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     // Traitement de la réponse JSON
                     try {
-                        formations = new ArrayList<>();
-                        for (int i = 0; i < response.length(); i++) {
-                            JSONObject formationObject = response.getJSONObject(i);
-                            String name = formationObject.getString("name");
-                            String description = formationObject.getString("description");
-                            int coursesCount = formationObject.getInt("courses_count");
-                            String image = formationObject.getString("image");
+                        JSONArray data = response.getJSONArray("data");
+                        Courses = new ArrayList<Course>();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject CourseObject = data.getJSONObject(i);
+                            String name = CourseObject.getString("name");
+                            String content = CourseObject.getString("content");
+                            int difficulty = CourseObject.getInt("difficulty");
+                            String image = CourseObject.getString("image");
 
                             // Construire le chemin d'accès complet de l'image
                             String baseUrl = "https://kavita.jordan95v.fr/storage/";
                             String imageUrl = baseUrl + image;
 
-                            Formation formation = new Formation(name, description, imageUrl, coursesCount);
-                            formations.add(formation);
+                            Course course = new Course(name, content, imageUrl, difficulty);
+                            Courses.add(course);
                         }
 
                         // Mettre à jour l'adaptateur de la ListView avec les formations
-                        FormationAdapter adapter = new FormationAdapter(this, formations);
-                        listViewFormations.setAdapter(adapter);
+                        CourseAdapter adapter = new CourseAdapter(this, Courses);
+                        listViewCourses.setAdapter(adapter);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
                 error -> {
                     // Gérer les erreurs de la requête
-                    Toast.makeText(this, "Erreur lors de la récupération des formations: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("FormationActivity", "Erreur lors de la récupération des formations", error);
+                    Toast.makeText(this, "Erreur lors de la récupération des Cours: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("CourseActivity", "Erreur lors de la récupération des Cours", error);
                 }
 
 
@@ -132,21 +119,4 @@ public class FormationActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
-
-    private void checkApiKey() {
-        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        String apiKey = preferences.getString("api_key", "");
-
-
-        if (apiKey.isEmpty()) {
-            // La clé n'est pas stockée dans les préférences
-            Toast.makeText(this, "La clé d'API n'est pas stockée dans les préférences", Toast.LENGTH_SHORT).show();
-        } else {
-            // La clé est stockée dans les préférences
-            Toast.makeText(this, "La clé d'API est correctement stockée dans les préférences", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-
 }

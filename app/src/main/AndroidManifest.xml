@@ -20,6 +20,10 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
+        <activity android:name=".FormationContentActivity"
+            android:exported="false" />
+        <activity android:name=".CourseActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

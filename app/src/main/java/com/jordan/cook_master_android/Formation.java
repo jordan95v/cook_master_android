@@ -8,8 +8,8 @@ public class Formation {
 
     private Integer courses_count;
 
-    public Formation(String titre, String description, String image, Integer courses_count) {
-        this.name = titre;
+    public Formation(String name, String description, String image, Integer courses_count) {
+        this.name = name;
         this.description = description;
         this.image = image;
         this.courses_count = courses_count;

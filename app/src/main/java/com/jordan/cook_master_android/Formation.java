@@ -1,6 +1,8 @@
 package com.jordan.cook_master_android;
 
 public class Formation {
+
+    private int id;
     private String name;
     private String description;
 
@@ -8,11 +10,16 @@ public class Formation {
 
     private Integer courses_count;
 
-    public Formation(String name, String description, String image, Integer courses_count) {
+    public Formation(Integer id, String name, String description, String image, Integer courses_count) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.courses_count = courses_count;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {

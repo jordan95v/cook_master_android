@@ -98,11 +98,16 @@ public class FormationContentActivity extends AppCompatActivity {
                             TextView courseNameTextView = courseView.findViewById(R.id.course_name);
                             ImageView courseImageView = courseView.findViewById(R.id.course_image);
                             TextView courseDurationTextView = courseView.findViewById(R.id.course_duration);
+                            TextView courseContentTextView = courseView.findViewById(R.id.course_content);
                             TextView courseDifficultyTextView = courseView.findViewById(R.id.course_difficulty);
 
                             // Définir les valeurs des vues avec les données du cours de formation
                             courseNameTextView.setText(courseName);
                             Picasso.get().load(imageUrl).into(courseImageView);
+                            if (courseContent.length() > 30) {
+                                String truncatedText = courseContent.substring(0, 30);
+                                courseContentTextView.setText(truncatedText + "...");
+                            }
                             courseDurationTextView.setText("Duration: " + courseDuration);
                             courseDifficultyTextView.setText("Difficulty: " + courseDifficulty);
 

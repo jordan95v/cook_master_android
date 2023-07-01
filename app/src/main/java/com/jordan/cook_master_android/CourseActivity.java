@@ -42,6 +42,20 @@ public class CourseActivity extends AppCompatActivity {
 
         getCourses();
 
+        // Créer le listener pour la navigation
+        listViewCourses.setOnItemClickListener((parent, view, position, id) -> {
+            // Récupérer la formation sélectionnée
+            Course selectedCourse = Courses.get(position);
+
+            // Récupérer l'ID de la formation
+            int courseId = selectedCourse.getId();
+
+            // Lancer une nouvelle activité pour afficher le contenu de la formation
+            Intent intent = new Intent(CourseActivity.this, CourseContentActivity.class);
+            intent.putExtra("course_id", courseId);
+            startActivity(intent);
+        });
+
         BottomNavigationView navbar = findViewById(R.id.bottom_navigation);
         navbar.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.formations) {
@@ -81,6 +95,7 @@ public class CourseActivity extends AppCompatActivity {
                         Courses = new ArrayList<Course>();
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject CourseObject = data.getJSONObject(i);
+                            int id = CourseObject.getInt("id");
                             String name = CourseObject.getString("name");
                             String content = CourseObject.getString("content");
                             int difficulty = CourseObject.getInt("difficulty");
@@ -90,7 +105,7 @@ public class CourseActivity extends AppCompatActivity {
                             String baseUrl = "https://kavita.jordan95v.fr/storage/";
                             String imageUrl = baseUrl + image;
 
-                            Course course = new Course(name, content, imageUrl, difficulty);
+                            Course course = new Course(id,name, content, imageUrl, difficulty);
                             Courses.add(course);
                         }
 

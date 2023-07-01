@@ -46,7 +46,9 @@ public class FormationActivity extends AppCompatActivity {
             Formation selectedFormation = formations.get(position);
 
             // Récupérer l'ID de la formation
-            int formationId = position + 1; // Suppose que l'ID de la formation est basé sur la position dans la liste
+            // Récupérer l'ID de la formation sélectionnée
+            int formationId = selectedFormation.getId();
+
 
             // Lancer une nouvelle activité pour afficher le contenu de la formation
             Intent intent = new Intent(FormationActivity.this, FormationContentActivity.class);
@@ -94,6 +96,7 @@ public class FormationActivity extends AppCompatActivity {
                         formations = new ArrayList<>();
                         for (int i = 0; i < response.length(); i++) {
                             JSONObject formationObject = response.getJSONObject(i);
+                            int id = formationObject.getInt("id");
                             String name = formationObject.getString("name");
                             String description = formationObject.getString("description");
                             int coursesCount = formationObject.getInt("courses_count");
@@ -103,7 +106,7 @@ public class FormationActivity extends AppCompatActivity {
                             String baseUrl = "https://kavita.jordan95v.fr/storage/";
                             String imageUrl = baseUrl + image;
 
-                            Formation formation = new Formation(name, description, imageUrl, coursesCount);
+                            Formation formation = new Formation(id,name, description, imageUrl, coursesCount);
                             formations.add(formation);
                         }
 

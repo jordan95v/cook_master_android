@@ -24,6 +24,8 @@
             android:exported="false" />
         <activity android:name=".CourseActivity"
             android:exported="false" />
+        <activity android:name=".CourseContentActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

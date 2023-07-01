@@ -9,7 +9,7 @@
         android:id="@+id/formation_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/formation_name"
@@ -34,13 +34,22 @@
         android:layout_below="@id/formation_description"
         android:layout_marginTop="8dp" />
 
+    <TextView
+        android:id="@+id/courses_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/courses_count"
+        android:text="Cours de la formation :"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:id="@+id/coursesContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/courses_count"
+        android:layout_below="@id/courses_label"
         android:orientation="vertical"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="12dp">
     </LinearLayout>
 
 </RelativeLayout>

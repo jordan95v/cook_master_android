@@ -58,9 +58,6 @@ public class FormationActivity extends AppCompatActivity {
         String apiKey = preferences.getString("api_key", "");
         System.out.println(apiKey);;
 
-
-        checkApiKey();
-
         // Créer l'URL de la requête GET
         String url = BuildConfig.API_URL + "formations";
 
@@ -78,9 +75,14 @@ public class FormationActivity extends AppCompatActivity {
                             JSONObject formationObject = response.getJSONObject(i);
                             String name = formationObject.getString("name");
                             String description = formationObject.getString("description");
-                            //String image = formationObject.getString("image");
                             int coursesCount = formationObject.getInt("courses_count");
-                            Formation formation = new Formation(name, description, "https://via.placeholder.com/150", coursesCount);
+                            String image = formationObject.getString("image");
+
+                            // Construire le chemin d'accès complet de l'image
+                            String baseUrl = "https://kavita.jordan95v.fr/storage/";
+                            String imageUrl = baseUrl + image;
+
+                            Formation formation = new Formation(name, description, imageUrl, coursesCount);
                             formations.add(formation);
                         }
 

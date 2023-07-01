@@ -46,17 +46,13 @@ public class FormationActivity extends AppCompatActivity {
             Formation selectedFormation = formations.get(position);
 
             // Récupérer l'ID de la formation
-            // Récupérer l'ID de la formation sélectionnée
             int formationId = selectedFormation.getId();
-
 
             // Lancer une nouvelle activité pour afficher le contenu de la formation
             Intent intent = new Intent(FormationActivity.this, FormationContentActivity.class);
             intent.putExtra("formation_id", formationId);
             startActivity(intent);
         });
-
-
 
         BottomNavigationView navbar = findViewById(R.id.bottom_navigation);
         navbar.setOnItemSelectedListener(item -> {
@@ -122,8 +118,6 @@ public class FormationActivity extends AppCompatActivity {
                     Toast.makeText(this, "Erreur lors de la récupération des formations: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("FormationActivity", "Erreur lors de la récupération des formations", error);
                 }
-
-
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

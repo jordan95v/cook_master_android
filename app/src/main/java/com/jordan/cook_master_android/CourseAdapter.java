@@ -14,13 +14,14 @@ import java.util.List;
 
 public class CourseAdapter extends ArrayAdapter<Course> {
 
+        // LayoutInflater va servir à instancier le layout XML dans l'objet View
         private LayoutInflater inflater;
 
+        // Constructeur
         public CourseAdapter(Context context, List<Course> courses) {
             super(context, 0, courses);
             inflater = LayoutInflater.from(context);
         }
-
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View itemView = convertView;

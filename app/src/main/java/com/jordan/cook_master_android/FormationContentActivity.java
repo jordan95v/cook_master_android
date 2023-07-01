@@ -67,8 +67,6 @@ public class FormationContentActivity extends AppCompatActivity {
         Map<String, String> headers = new HashMap<>();
         headers.put("API-KEY", apiKey);
 
-
-
         // Créer la requête GET
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -80,7 +78,7 @@ public class FormationContentActivity extends AppCompatActivity {
                         LinearLayout coursesContainer = findViewById(R.id.coursesContainer);
                         for (int i = 0; i < formationCoursesArray.length(); i++) {
                             JSONObject formationCourseObject = formationCoursesArray.getJSONObject(i);
-
+                            int courseId = formationCourseObject.getInt("id");
                             // Extraire les données spécifiques de chaque formation_course
                             String courseName = formationCourseObject.getString("name");
                             String courseImage = formationCourseObject.getString("image");
@@ -110,6 +108,15 @@ public class FormationContentActivity extends AppCompatActivity {
                             }
                             courseDurationTextView.setText("Duration: " + courseDuration);
                             courseDifficultyTextView.setText("Difficulty: " + courseDifficulty);
+
+                            // Ajouter un listener pour détecter le clic sur le cours
+                            final int finalCourseId = courseId; // Besoin d'une variable finale pour l'utiliser dans le listener
+                            courseView.setOnClickListener(v -> {
+                                // Lancer l'activité CourseContentActivity avec l'ID du cours en tant qu'extra
+                                Intent intent = new Intent(FormationContentActivity.this, CourseContentActivity.class);
+                                intent.putExtra("course_id", finalCourseId);
+                                startActivity(intent);
+                            });
 
                             // Ajouter la vue du cours de formation au conteneur
                             coursesContainer.addView(courseView);
@@ -162,5 +169,4 @@ public class FormationContentActivity extends AppCompatActivity {
         }
     }
 
-    // ...
 }

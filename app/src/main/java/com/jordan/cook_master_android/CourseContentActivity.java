@@ -58,7 +58,6 @@ public class CourseContentActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String apiKey = preferences.getString("api_key", "");
 
-
         // Créer l'URL de la requête GET
         String url = BuildConfig.API_URL + "courses/" + CourseId;
 
@@ -72,8 +71,6 @@ public class CourseContentActivity extends AppCompatActivity {
                     // Traitement de la réponse JSON
                     try {
                         JSONObject courseObject = response;
-
-
                         String name = courseObject.getString("name");
                         String description = courseObject.getString("content");
                         String image = courseObject.getString("image");
@@ -85,7 +82,6 @@ public class CourseContentActivity extends AppCompatActivity {
                         String imageUrl = baseUrl + image;
 
                         // Afficher les données de la formation dans les vues correspondantes
-
                         CourseName.setText(name);
                         CourseDescription.setText(description);
                         Picasso.get().load(imageUrl).into(CourseImage);
@@ -101,8 +97,6 @@ public class CourseContentActivity extends AppCompatActivity {
                     Toast.makeText(this, "Erreur lors de la récupération des cours: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("CourseActivity", "Erreur lors de la récupération des cours", error);
                 }
-
-
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

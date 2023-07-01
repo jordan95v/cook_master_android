@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
     EditText password_field;
     TextView invalid_credentials;
     private boolean call_success = false;
+
+    private static final String SHARED_PREFS_NAME = "MySharedPrefs";
+
 
     private boolean check_input_are_not_empty() {
         /* Check if the input are not empty. */
@@ -66,10 +68,11 @@ public class MainActivity extends AppCompatActivity {
                 this.invalid_credentials.setText(R.string.error_happened);
                 return;
             }
-            SharedPreferences preferences = this.getPreferences(MODE_PRIVATE);
+            SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("api_key", api_key);
             editor.apply();
+
             this.call_success = true;
         }, error -> {
             this.invalid_credentials.setVisibility(TextView.VISIBLE);

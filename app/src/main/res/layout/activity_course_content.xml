@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <ImageView
@@ -15,7 +16,6 @@
         android:id="@+id/course_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/course_image"
         android:layout_marginTop="16dp"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -24,7 +24,6 @@
         android:id="@+id/difficulty_duration_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/course_name"
         android:orientation="horizontal"
         android:layout_marginTop="8dp">
 
@@ -47,7 +46,19 @@
         android:id="@+id/course_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/difficulty_duration_layout"
         android:layout_marginTop="8dp" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/complete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Terminer ce cours" />
+    <TextView
+        android:id="@+id/course_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        />
+
+</LinearLayout>

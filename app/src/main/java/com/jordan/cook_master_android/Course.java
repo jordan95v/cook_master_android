@@ -9,13 +9,15 @@ public class Course {
     private String image;
 
     private Integer difficulty;
+    private boolean isFinished;
 
-    public Course(int id, String name, String content, String image, Integer difficulty) {
+    public Course(int id, String name, String content, String image,boolean isFinished ,Integer difficulty) {
         this.id = id;
         this.name = name;
         this.content = content;
         this.image = image;
         this.difficulty = difficulty;
+        this.isFinished = isFinished;
     }
 
     public Integer getId() {
@@ -38,9 +40,13 @@ public class Course {
         return difficulty;
     }
 
+    public boolean isFinished() {return isFinished;}
+
     @Override
     public String toString() {
         return name;
     }
+
 }
+
 

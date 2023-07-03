@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,10 +50,12 @@ public class CourseActivity extends AppCompatActivity {
 
             // Récupérer l'ID de la formation
             int courseId = selectedCourse.getId();
+            boolean isFinished = selectedCourse.isFinished();
 
             // Lancer une nouvelle activité pour afficher le contenu de la formation
             Intent intent = new Intent(CourseActivity.this, CourseContentActivity.class);
             intent.putExtra("course_id", courseId);
+            intent.putExtra("is_finished", isFinished);
             startActivity(intent);
         });
 
@@ -67,6 +70,8 @@ public class CourseActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (item.getItemId() == R.id.user_profile) {
+                Intent intent = new Intent(this, AccountActivity.class);
+                startActivity(intent);
                 return true;
             }
             return true;
@@ -87,25 +92,25 @@ public class CourseActivity extends AppCompatActivity {
         headers.put("API-KEY",  apiKey);
 
         // Créer la requête GET
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
                     // Traitement de la réponse JSON
                     try {
-                        JSONArray data = response.getJSONArray("data");
-                        Courses = new ArrayList<Course>();
-                        for (int i = 0; i < data.length(); i++) {
-                            JSONObject CourseObject = data.getJSONObject(i);
+                        Courses = new ArrayList<>();
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject CourseObject = response.getJSONObject(i);
                             int id = CourseObject.getInt("id");
                             String name = CourseObject.getString("name");
                             String content = CourseObject.getString("content");
                             int difficulty = CourseObject.getInt("difficulty");
                             String image = CourseObject.getString("image");
+                            boolean isFinished = CourseObject.getBoolean("is_finished");
 
                             // Construire le chemin d'accès complet de l'image
                             String baseUrl = "https://kavita.jordan95v.fr/storage/";
                             String imageUrl = baseUrl + image;
 
-                            Course course = new Course(id,name, content, imageUrl, difficulty);
+                            Course course = new Course(id,name, content, imageUrl ,isFinished,difficulty);
                             Courses.add(course);
                         }
 
@@ -134,4 +139,5 @@ public class CourseActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
 }

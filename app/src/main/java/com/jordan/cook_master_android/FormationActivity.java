@@ -65,6 +65,8 @@ public class FormationActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (item.getItemId() == R.id.user_profile) {
+                Intent intent = new Intent(this, AccountActivity.class);
+                startActivity(intent);
                 return true;
             }
             return true;
@@ -75,7 +77,6 @@ public class FormationActivity extends AppCompatActivity {
         // Récupérer l'API key depuis les préférences partagées
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String apiKey = preferences.getString("api_key", "");
-
 
         // Créer l'URL de la requête GET
         String url = BuildConfig.API_URL + "formations";

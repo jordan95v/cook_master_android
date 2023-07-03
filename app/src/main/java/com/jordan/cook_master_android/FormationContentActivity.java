@@ -170,3 +170,4 @@ public class FormationContentActivity extends AppCompatActivity {
     }
 
 }
+

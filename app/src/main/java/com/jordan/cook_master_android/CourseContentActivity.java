@@ -34,8 +34,10 @@ public class CourseContentActivity extends AppCompatActivity {
     private TextView CourseDifficulty;
     private Integer CourseId;
     private Button completeButton;
-    private Boolean courseFinished = false;
+    private Boolean courseFinished;
     private TextView courseStatus;
+    private Button backButton;
+    private Integer formationId;
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
 
     @Override
@@ -47,6 +49,7 @@ public class CourseContentActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             CourseId = intent.getIntExtra("course_id", -1);
+            formationId = intent.getIntExtra("formation_id", -1);
             courseFinished = intent.getBooleanExtra("is_finished", false);
         }
 
@@ -58,11 +61,31 @@ public class CourseContentActivity extends AppCompatActivity {
         CourseDifficulty = findViewById(R.id.course_difficulty);
         completeButton = findViewById(R.id.complete_button);
         courseStatus = findViewById(R.id.course_status);
+        backButton = findViewById(R.id.back_button);
+        String comingFrom = intent.getStringExtra("coming_from");
 
-        completeButton.setOnClickListener(v -> {
-            markCourseAsFinished();
+        /*if(courseFinished){
+            completeButton.setVisibility(View.GONE);
+            courseStatus.setText("Cours terminé");
+        }else{
+            completeButton.setVisibility(View.VISIBLE);
+            courseStatus.setText("Cours en cours");
+            completeButton.setOnClickListener(v -> markCourseAsFinished());
+        }*/
+
+        backButton.setOnClickListener(v -> {
+            if("FormationContentActivity".equals(comingFrom)){
+                Intent intent1 = new Intent(CourseContentActivity.this, FormationContentActivity.class);
+                intent1.putExtra("is_finished", courseFinished);
+                intent1.putExtra("formation_id", formationId);
+                startActivity(intent1);
+            }else if("CourseActivity".equals(comingFrom)){
+                Intent intent1 = new Intent(CourseContentActivity.this, CourseActivity.class);
+                startActivity(intent1);
+            }
         });
         getCourses();
+
 
     }
 
@@ -103,14 +126,20 @@ public class CourseContentActivity extends AppCompatActivity {
                         CourseDuration.setText("Durée du Cours : " + duration + " minutes");
                         CourseDifficulty.setText("Difficulté : " + difficulty + "/5");
 
-                        // Mettre à jour l'état du bouton
+//                        finished();
+
+                        // Définir le statut du bouton
                         if(courseFinished){
-                            completeButton.setVisibility(View.GONE);
-                            courseStatus.setText("Cours terminé");
+                            completeButton.setText("Terminé");
+                            completeButton.setEnabled(false);  // Désactiver le bouton
+                            courseStatus.setText("Terminé");
                         } else {
-                            completeButton.setEnabled(true);
                             completeButton.setText("Marquer comme terminé");
+                            completeButton.setEnabled(true);   // Activer le bouton
+                            completeButton.setOnClickListener(v -> markCourseAsFinished());
+                            courseStatus.setText("Cours en cours");
                         }
+
 
 
                     } catch (JSONException e) {
@@ -138,6 +167,10 @@ public class CourseContentActivity extends AppCompatActivity {
     private void markCourseAsFinished(){
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String apiKey = preferences.getString("api_key", "");
+        int finishedCoursesCount = preferences.getInt("finished_courses_count", 0);
+
+        finishedCoursesCount++;
+        preferences.edit().putInt("finished_courses_count", finishedCoursesCount).apply();
 
         // Créer l'URL de la requête POST
         String url = BuildConfig.API_URL + "courses/" + CourseId + "/finished";
@@ -156,9 +189,6 @@ public class CourseContentActivity extends AppCompatActivity {
                         // Afficher un Toast avec le message de la réponse
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-
-                        completeButton.setVisibility(View.GONE);
-                        courseStatus.setText("Cours terminé");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -179,5 +209,15 @@ public class CourseContentActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
+/*    private void finished (){
+        if(courseFinished){
+            completeButton.setVisibility(View.GONE);
+            courseStatus.setText("Cours terminé");
+        } else {
+            completeButton.setEnabled(true);
+            completeButton.setText("Marquer comme terminé");
+        }
+    }*/
 
 }

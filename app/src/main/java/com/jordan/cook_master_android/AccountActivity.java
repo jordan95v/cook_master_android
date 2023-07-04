@@ -77,7 +77,6 @@ public class AccountActivity extends AppCompatActivity {
         // Créer les en-têtes de la requête avec l'API key
         Map<String, String> headers = new HashMap<>();
         headers.put("API-KEY",  apiKey);
-        checkApiKey();
 
         // Créer la requête GET
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,

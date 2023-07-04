@@ -51,6 +51,7 @@ public class FormationActivity extends AppCompatActivity {
             // Lancer une nouvelle activité pour afficher le contenu de la formation
             Intent intent = new Intent(FormationActivity.this, FormationContentActivity.class);
             intent.putExtra("formation_id", formationId);
+            intent.putExtra("course_count", selectedFormation.getCoursesCount());
             startActivity(intent);
         });
 

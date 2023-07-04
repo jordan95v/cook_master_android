@@ -43,6 +43,7 @@ public class CourseActivity extends AppCompatActivity {
 
         getCourses();
 
+
         // Créer le listener pour la navigation
         listViewCourses.setOnItemClickListener((parent, view, position, id) -> {
             // Récupérer la formation sélectionnée
@@ -56,6 +57,7 @@ public class CourseActivity extends AppCompatActivity {
             Intent intent = new Intent(CourseActivity.this, CourseContentActivity.class);
             intent.putExtra("course_id", courseId);
             intent.putExtra("is_finished", isFinished);
+            intent.putExtra("coming_from","CourseActivity");
             startActivity(intent);
         });
 

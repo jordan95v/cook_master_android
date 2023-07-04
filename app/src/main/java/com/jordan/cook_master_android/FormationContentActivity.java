@@ -2,9 +2,11 @@ package com.jordan.cook_master_android;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FormationContentActivity extends AppCompatActivity {
@@ -35,43 +39,49 @@ public class FormationContentActivity extends AppCompatActivity {
     private TextView formationName;
     private TextView formationDescription;
     private TextView coursesCount;
+    private int fcoursesCount;
+    private Button backButton;
+    private Button certificateButton;
+    private int finishedCoursesCount = 0;
+    private List<TextView> courseViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formation_content);
 
-        // Récupérer l'ID de la formation depuis l'intent
         Intent intent = getIntent();
         if (intent != null) {
             formationId = intent.getIntExtra("formation_id", -1);
+            fcoursesCount = intent.getIntExtra("course_count", -1);
         }
 
         formationImage = findViewById(R.id.formation_image);
         formationName = findViewById(R.id.formation_name);
         formationDescription = findViewById(R.id.formation_description);
         coursesCount = findViewById(R.id.courses_count);
+        backButton = findViewById(R.id.back_button);
+        certificateButton = findViewById(R.id.certificate_button);
 
-        getFormations();
+        getFormation();
+
+        backButton.setOnClickListener(v -> {
+            Intent intent1 = new Intent(FormationContentActivity.this, FormationActivity.class);
+            startActivity(intent1);
+        });
     }
 
-    private void getFormations() {
-        // Récupérer l'API key depuis les préférences partagées
+    private void getFormation() {
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String apiKey = preferences.getString("api_key", "");
 
-        // Créer l'URL de la requête GET
         String url = BuildConfig.API_URL + "formations/" + formationId;
 
-        // Créer les en-têtes de la requête avec l'API key
         Map<String, String> headers = new HashMap<>();
         headers.put("API-KEY", apiKey);
 
-        // Créer la requête GET
-
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    // Traitement de la réponse JSON
                     try {
                         JSONObject formationObject = response;
                         JSONArray formationCoursesArray = formationObject.getJSONArray("formation_courses");
@@ -79,27 +89,29 @@ public class FormationContentActivity extends AppCompatActivity {
                         for (int i = 0; i < formationCoursesArray.length(); i++) {
                             JSONObject formationCourseObject = formationCoursesArray.getJSONObject(i);
                             int courseId = formationCourseObject.getInt("id");
-                            // Extraire les données spécifiques de chaque formation_course
                             String courseName = formationCourseObject.getString("name");
                             String courseImage = formationCourseObject.getString("image");
-                            // Construire le chemin d'accès complet de l'image
                             String baseUrl = "https://kavita.jordan95v.fr/storage/";
                             String imageUrl = baseUrl + courseImage;
                             int courseDuration = formationCourseObject.getInt("duration");
                             int courseDifficulty = formationCourseObject.getInt("difficulty");
                             String courseContent = formationCourseObject.getString("content");
+                            if(formationCourseObject.getBoolean("is_finished")){
+                                finishedCoursesCount++;
+                            }
 
-                            // Créer une vue pour afficher les données du cours de formation
                             View courseView = getLayoutInflater().inflate(R.layout.item_course_container, null);
 
-                            // Récupérer les vues dans la vue du cours de formation
                             TextView courseNameTextView = courseView.findViewById(R.id.course_name);
+                            courseViews.add(courseNameTextView);
                             ImageView courseImageView = courseView.findViewById(R.id.course_image);
                             TextView courseDurationTextView = courseView.findViewById(R.id.course_duration);
+                            courseViews.add(courseDurationTextView);
                             TextView courseContentTextView = courseView.findViewById(R.id.course_content);
+                            courseViews.add(courseContentTextView);
                             TextView courseDifficultyTextView = courseView.findViewById(R.id.course_difficulty);
+                            courseViews.add(courseDifficultyTextView);
 
-                            // Définir les valeurs des vues avec les données du cours de formation
                             courseNameTextView.setText(courseName);
                             Picasso.get().load(imageUrl).into(courseImageView);
                             if (courseContent.length() > 30) {
@@ -109,16 +121,21 @@ public class FormationContentActivity extends AppCompatActivity {
                             courseDurationTextView.setText("Duration: " + courseDuration);
                             courseDifficultyTextView.setText("Difficulty: " + courseDifficulty);
 
-                            // Ajouter un listener pour détecter le clic sur le cours
-                            final int finalCourseId = courseId; // Besoin d'une variable finale pour l'utiliser dans le listener
+                            final int finalCourseId = courseId;
                             courseView.setOnClickListener(v -> {
-                                // Lancer l'activité CourseContentActivity avec l'ID du cours en tant qu'extra
                                 Intent intent = new Intent(FormationContentActivity.this, CourseContentActivity.class);
                                 intent.putExtra("course_id", finalCourseId);
+                                intent.putExtra("formation_id", formationId);
+                                intent.putExtra("coming_from","FormationContentActivity");
+                                try {
+                                    boolean isFinished = formationCourseObject.getBoolean("is_finished");
+                                    intent.putExtra("is_finished", isFinished);
+                                }catch (JSONException e){
+                                    e.printStackTrace();
+                                }
                                 startActivity(intent);
                             });
 
-                            // Ajouter la vue du cours de formation au conteneur
                             coursesContainer.addView(courseView);
                         }
 
@@ -126,20 +143,19 @@ public class FormationContentActivity extends AppCompatActivity {
                         String description = formationObject.getString("description");
                         String image = formationObject.getString("image");
 
-                        // Construire le chemin d'accès complet de l'image
                         String baseUrl = "https://kavita.jordan95v.fr/storage/";
                         String imageUrl = baseUrl + image;
 
-                        // Afficher les données de la formation dans les vues correspondantes
                         formationName.setText(name);
                         formationDescription.setText(description);
+                        coursesCount.setText("number of Courses: " + fcoursesCount);
                         Picasso.get().load(imageUrl).into(formationImage);
+                        getCertificate();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 },
                 error -> {
-                    // Gérer les erreurs de la requête
                     Toast.makeText(this, "Erreur lors de la récupération des formations: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("FormationActivity", "Erreur lors de la récupération des formations", error);
                 }
@@ -151,23 +167,21 @@ public class FormationContentActivity extends AppCompatActivity {
             }
         };
 
-        // Ajouter la requête à la file d'attente Volley
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
 
-    private void checkApiKey() {
-        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        String apiKey = preferences.getString("api_key", "");
-
-        if (apiKey.isEmpty()) {
-            // La clé n'est pas stockée dans les préférences
-            Toast.makeText(this, "La clé d'API n'est pas stockée dans les préférences", Toast.LENGTH_SHORT).show();
+    private void getCertificate () {
+        if (finishedCoursesCount == fcoursesCount) {
+            Toast.makeText(this, "Vous avez terminé tous les cours de la formation", Toast.LENGTH_SHORT).show();
+            for (TextView courseView : courseViews) {
+                courseView.setEnabled(false);
+                courseView.setTextColor(Color.GRAY);
+            }
+            certificateButton.setVisibility(View.VISIBLE);
         } else {
-            // La clé est stockée dans les préférences
-            Toast.makeText(this, "La clé d'API est correctement stockée dans les préférences", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vous n'avez pas terminé tous les cours de la formation", Toast.LENGTH_SHORT).show();
+            certificateButton.setVisibility(View.GONE);
         }
     }
-
 }
-

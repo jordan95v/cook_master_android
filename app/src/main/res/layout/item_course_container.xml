@@ -43,6 +43,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageView
+            android:id="@+id/course_check"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/check"
+            android:layout_gravity="right"
+            android:visibility="gone"/>
     </LinearLayout>
 </LinearLayout>
 

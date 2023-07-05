@@ -108,6 +108,7 @@ public class CourseActivity extends AppCompatActivity {
                             String image = CourseObject.getString("image");
                             boolean isFinished = CourseObject.getBoolean("is_finished");
 
+
                             // Construire le chemin d'accès complet de l'image
                             String baseUrl = "https://kavita.jordan95v.fr/storage/";
                             String imageUrl = baseUrl + image;

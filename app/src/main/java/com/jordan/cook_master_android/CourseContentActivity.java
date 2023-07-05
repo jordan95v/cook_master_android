@@ -37,6 +37,7 @@ public class CourseContentActivity extends AppCompatActivity {
     private Boolean courseFinished;
     private TextView courseStatus;
     private Button backButton;
+    private Integer fcoursesCount;
     private Integer formationId;
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
 
@@ -50,6 +51,7 @@ public class CourseContentActivity extends AppCompatActivity {
         if (intent != null) {
             CourseId = intent.getIntExtra("course_id", -1);
             formationId = intent.getIntExtra("formation_id", -1);
+            fcoursesCount = intent.getIntExtra("course_count", -1);
             courseFinished = intent.getBooleanExtra("is_finished", false);
         }
 
@@ -78,6 +80,7 @@ public class CourseContentActivity extends AppCompatActivity {
                 Intent intent1 = new Intent(CourseContentActivity.this, FormationContentActivity.class);
                 intent1.putExtra("is_finished", courseFinished);
                 intent1.putExtra("formation_id", formationId);
+                intent1.putExtra("course_count", fcoursesCount);
                 startActivity(intent1);
             }else if("CourseActivity".equals(comingFrom)){
                 Intent intent1 = new Intent(CourseContentActivity.this, CourseActivity.class);

@@ -6,17 +6,21 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="dont_have_account">No account yet ?</string>
-    <string name="invalid_credentials">Bad credentials</string>
+    <string name="invalid_credentials">Invalid login information</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="godfather_key">Godgather\'s key</string>
+    <string name="godfather_key">Godfather\'s key</string>
     <string name="confirm_password">Confirm password</string>
     <string name="already_registered">Already have an account ?</string>
     <string name="field_cannot_be_empty">This field is required</string>
     <string name="password_no_match">Passwords don\'t match</string>
     <string name="username">Username</string>
-    <string name="error_happened">An error occured, try again later</string>
+    <string name="error_happened">An error occurred, try again later</string>
     <string name="formations">Formations</string>
     <string name="user_profile">Profile</string>
     <string name="courses">Courses</string>
+    <string name="retour">Back</string>
+    <string name="afficher_le_certificat">Display the certificate</string>
+    <string name="cours_de_la_formation">Courses of the training:</string>
+    <string name="s_abonner">Subscribe</string>
 </resources>

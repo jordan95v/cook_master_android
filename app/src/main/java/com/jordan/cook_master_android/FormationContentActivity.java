@@ -1,5 +1,8 @@
 package com.jordan.cook_master_android;
 
+import static android.os.SystemClock.sleep;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -45,6 +48,8 @@ public class FormationContentActivity extends AppCompatActivity {
     private Button certificateButton;
     private int finishedCoursesCount = 0;
     private Button subscribeButton;
+
+    private ImageView certificateImage;
     private boolean allcourseChecked = false;
     private List<View> courseViews = new ArrayList<>();
 
@@ -66,6 +71,7 @@ public class FormationContentActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         certificateButton = findViewById(R.id.certificate_button);
         subscribeButton = findViewById(R.id.subscribe_button);
+        certificateImage = findViewById(R.id.certificate_image);
 
         subscribeButton.setOnClickListener(v -> subscribeToFormation());
 
@@ -91,7 +97,7 @@ public class FormationContentActivity extends AppCompatActivity {
         Map<String, String> headers = new HashMap<>();
         headers.put("API-KEY", apiKey);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        @SuppressLint("SetTextI18n") JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
                         JSONObject formationObject = response;
@@ -171,6 +177,7 @@ public class FormationContentActivity extends AppCompatActivity {
                         coursesCount.setText("number of Courses: " + fcoursesCount);
                         Picasso.get().load(imageUrl).into(formationImage);
                         allcourseChecked = true;
+                        getCertificateImage();
                         getCertificate();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -194,9 +201,6 @@ public class FormationContentActivity extends AppCompatActivity {
 
 
     private void getCertificate () {
-        if (!allcourseChecked){
-            return;
-        }
         if (subscribeButton.getVisibility() == View.GONE && finishedCoursesCount == fcoursesCount) {
             Toast.makeText(this, "Vous avez terminé tous les cours de la formation", Toast.LENGTH_SHORT).show();
             for (View courseView : courseViews) {
@@ -205,10 +209,65 @@ public class FormationContentActivity extends AppCompatActivity {
                 courseView.setBackgroundColor(Color.parseColor("#E0E0E0"));
             }
             certificateButton.setVisibility(View.VISIBLE);
+
+            // Ajouter un listener pour le bouton du certificat
+            certificateButton.setOnClickListener(v -> {
+                // Récupérer le chemin de l'image du certificat depuis les préférences partagées
+                SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+                String imageCertification = preferences.getString("certification_image", "");
+                if (!imageCertification.isEmpty()) {
+                    // Construire le chemin d'accès complet de l'image
+                    String baseUrl = "https://kavita.jordan95v.fr/storage/";
+                    String imageUrl = baseUrl + imageCertification;
+
+                    // Charger l'image dans le ImageView pour le certificat
+                    Picasso.get().load(imageUrl).into(certificateImage);
+
+                    // Rendre le ImageView pour le certificat visible
+                    certificateImage.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(this, "Erreur lors de la récupération de l'image du certificat.", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
-            Toast.makeText(this, "Vous n'avez pas terminé tous les cours de la formation", Toast.LENGTH_SHORT).show();
             certificateButton.setVisibility(View.GONE);
         }
+    }
+
+
+    private void getCertificateImage() {
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        String apiKey = preferences.getString("api_key", "");
+
+        String url = BuildConfig.API_URL + "formations/" + formationId;
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("API-KEY", apiKey);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
+                response -> {
+                    try {
+                        // Stocker le chemin de l'image du certificat dans les préférences partagées
+                        String imageCertification = response.getString("image");
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("certification_image", imageCertification);
+                        editor.apply();
+                    } catch (JSONException e) {
+                        //...
+                    }
+                },
+                error -> {
+                    //...
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 
 

@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             String api_key = null;
             try {
                 api_key = response.getString("key");
+
             } catch (JSONException e) {
                 this.invalid_credentials.setText(R.string.error_happened);
                 return;
@@ -72,13 +73,17 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("api_key", api_key);
             editor.apply();
-
             this.call_success = true;
+
         }, error -> {
             this.invalid_credentials.setVisibility(TextView.VISIBLE);
         });
         queue.add(request);
     }
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

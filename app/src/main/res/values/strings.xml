@@ -18,4 +18,8 @@
     <string name="formations">Formations</string>
     <string name="user_profile">Profil</string>
     <string name="courses">Cours</string>
+    <string name="retour">Retour</string>
+    <string name="afficher_le_certificat">Afficher le certificat</string>
+    <string name="cours_de_la_formation">Cours de la formation :</string>
+    <string name="s_abonner">S\'abonner</string>
 </resources>

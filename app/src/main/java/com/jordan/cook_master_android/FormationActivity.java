@@ -3,8 +3,10 @@ package com.jordan.cook_master_android;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +15,13 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
@@ -34,6 +42,11 @@ public class FormationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formations);
+
+        SharedPreferences preferences1 = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        String api_key = preferences1.getString("api_key", "");
+
+        getSubscriptionName();
 
         // Récupérer la ListView depuis le layout XML
         listViewFormations = findViewById(R.id.list_formations);
@@ -131,6 +144,54 @@ public class FormationActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
+    private void getSubscriptionName() {
+        /* Get the subscription name. */
+        String url = BuildConfig.API_URL + "user";
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        String api_key = preferences.getString("api_key", "");
+        Map<String, String> headers = new HashMap<>();
+        headers.put("API-KEY",  api_key);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    String subscription_name = null;
+                    try {
+                        subscription_name = response.getString("subscription_name");
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Erreur lors de la récupération du nom d'abonnement: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("subscription_name", subscription_name);
+                    editor.apply();
+                    Log.d("FormationActivity", "Subscription name: " + subscription_name);
+
+                    if(subscription_name.equals("free")) {
+                        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                            @Override
+                            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+                            }
+                        });
+
+                        AdView mAdView = findViewById(R.id.adView);
+                        AdRequest adRequest = new AdRequest.Builder().build();
+                        mAdView.loadAd(adRequest);
+                    }
+                }, error -> {
+            Toast.makeText(this, "Erreur lors de la récupération du nom d'abonnement: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(request);
+    }
+
+
 
     private void checkApiKey() {
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);

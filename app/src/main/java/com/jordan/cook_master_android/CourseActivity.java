@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class CourseActivity extends AppCompatActivity {
 
     private ListView listViewCourses;
     private List<Course> Courses;
+    String errorMessage;
 
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
 
@@ -38,7 +40,27 @@ public class CourseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
 
-        // Récupérer la ListView depuis le layout XML
+        Intent intenterr = getIntent();
+        if (intenterr != null) {
+            errorMessage = intenterr.getStringExtra("error_message");
+            if (errorMessage != null) {
+                try {
+                    // Créez un JSONObject à partir de la chaîne d'erreur
+                    JSONObject errorJson = new JSONObject(errorMessage);
+
+                    // Récupérez le message d'erreur
+                    String message = errorJson.getString("message");
+
+                    // Utilisez le message pour mettre à jour le TextView
+                    TextView errorMessageTextView = findViewById(R.id.error_message_text_view);
+                    errorMessageTextView.setText(message);
+                    errorMessageTextView.setVisibility(TextView.VISIBLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         listViewCourses = findViewById(R.id.list_courses);
 
         getCourses();
@@ -60,6 +82,9 @@ public class CourseActivity extends AppCompatActivity {
             intent.putExtra("coming_from","CourseActivity");
             startActivity(intent);
         });
+
+
+        Log.d("CourseActivity", "Error message: " + errorMessage);
 
         BottomNavigationView navbar = findViewById(R.id.bottom_navigation);
         navbar.setOnItemSelectedListener(item -> {

@@ -13,8 +13,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
@@ -22,6 +25,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -150,14 +155,43 @@ public class CourseContentActivity extends AppCompatActivity {
                     }
                 },
                 error -> {
-                    // Gérer les erreurs de la requête
-                    Toast.makeText(this, "Erreur lors de la récupération des cours: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("CourseActivity", "Erreur lors de la récupération des cours", error);
+                    // Récupérer le message d'erreur du VolleyError
+                    String errorMessage = error.getMessage();
+                    Log.e("TAG", "Error message: " + errorMessage);
+
+                    // Créer un nouvel Intent pour démarrer l'activité précédente
+                    String comingFrom = getIntent().getStringExtra("coming_from");
+                    Intent intent;
+                    if ("FormationContentActivity".equals(comingFrom)) {
+                        intent = new Intent(CourseContentActivity.this, FormationContentActivity.class);
+                    } else { // Assuming the default is CourseActivity
+                        intent = new Intent(CourseContentActivity.this, CourseActivity.class);
+                    }
+
+                    // Passer le message d'erreur à l'activité précédente
+                    intent.putExtra("error_message", errorMessage);
+
+                    // Passer les valeurs de formationId, is_finished et course_count à l'activité précédente
+                    intent.putExtra("formation_id", formationId);
+                    intent.putExtra("is_finished", courseFinished);
+                    intent.putExtra("course_count", fcoursesCount);
+
+                    startActivity(intent);
                 }
+
         ) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 return headers;
+            }
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                if(volleyError.networkResponse != null && volleyError.networkResponse.data != null){
+                    VolleyError error = new VolleyError(new String(volleyError.networkResponse.data, StandardCharsets.UTF_8));
+                    volleyError = error;
+                }
+
+                return volleyError;
             }
         };
 

@@ -1,5 +1,6 @@
 package com.jordan.cook_master_android;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -79,7 +80,7 @@ public class AccountActivity extends AppCompatActivity {
         headers.put("API-KEY",  apiKey);
 
         // Créer la requête GET
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        @SuppressLint("SetTextI18n") JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     // Traitement de la réponse JSON
                     try {

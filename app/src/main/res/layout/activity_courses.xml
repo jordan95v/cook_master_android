@@ -8,6 +8,15 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".CourseActivity">
+    <TextView
+        android:id="@+id/error_message_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp"
+        android:visibility="gone"
+        />
+
 
     <ListView
         android:id="@+id/list_courses"

@@ -52,6 +52,7 @@ public class FormationContentActivity extends AppCompatActivity {
     private ImageView certificateImage;
     private boolean allcourseChecked = false;
     private List<View> courseViews = new ArrayList<>();
+    String errorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,23 @@ public class FormationContentActivity extends AppCompatActivity {
         if (intent != null) {
             formationId = intent.getIntExtra("formation_id", -1);
             fcoursesCount = intent.getIntExtra("course_count", -1);
+            errorMessage = intent.getStringExtra("error_message");
+            if (errorMessage != null) {
+                try {
+                    // Créez un JSONObject à partir de la chaîne d'erreur
+                    JSONObject errorJson = new JSONObject(errorMessage);
+
+                    // Récupérez le message d'erreur
+                    String message = errorJson.getString("message");
+
+                    // Utilisez le message pour mettre à jour le TextView
+                    TextView errorMessageTextView = findViewById(R.id.error_message_text_view);
+                    errorMessageTextView.setText(message);
+                    errorMessageTextView.setVisibility(TextView.VISIBLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         formationImage = findViewById(R.id.formation_image);
@@ -77,6 +95,7 @@ public class FormationContentActivity extends AppCompatActivity {
 
         getFormation();
         isSubscribed();
+        Log.d("FormationContentActivity", "Error message: " + errorMessage);
 
         backButton.setOnClickListener(v -> {
             Intent intent1 = new Intent(FormationContentActivity.this, FormationActivity.class);

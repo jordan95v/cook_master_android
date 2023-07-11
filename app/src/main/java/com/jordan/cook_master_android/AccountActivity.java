@@ -25,12 +25,12 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccountActivity extends AppCompatActivity {
+public class    AccountActivity extends AppCompatActivity {
 
-    private TextView textViewId;
     private TextView textViewName;
     private TextView textViewEmail;
     private ImageView imageViewUser;
+    private  TextView textViewTotalDiscount;
 
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
 
@@ -39,10 +39,10 @@ public class AccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        textViewId = findViewById(R.id.txt_user_id);
         textViewName = findViewById(R.id.txt_user_name);
         textViewEmail = findViewById(R.id.txt_user_email);
-        imageViewUser = findViewById(R.id.formation_image);
+        imageViewUser = findViewById(R.id.user_image);
+        textViewTotalDiscount = findViewById(R.id.txt_total_discount);
 
         getUserAccount();
 
@@ -84,19 +84,19 @@ public class AccountActivity extends AppCompatActivity {
                 response -> {
                     // Traitement de la réponse JSON
                     try {
-                        int id = response.getInt("id");
                         String name = response.getString("name");
                         String email = response.getString("email");
                         String image = response.getString("image");
+                        int total_discount = response.getInt("total_discount");
 
                         // Construire le chemin d'accès complet de l'image
                         String baseUrl = "https://kavita.jordan95v.fr/storage/";
                         String imageUrl = baseUrl + image;
 
                         // Définir le texte des TextViews avec les informations de l'utilisateur
-                        textViewId.setText("ID de l'utilisateur: " + id);
-                        textViewName.setText("Nom de l'utilisateur: " + name);
-                        textViewEmail.setText("Email de l'utilisateur: " + email);
+                        textViewName.setText("Pseudo : " + name);
+                        textViewEmail.setText("Email : " + email);
+                        textViewTotalDiscount.setText("Portefeuille: " + total_discount);
 
                         // Définir l'image de l'ImageView avec l'image de l'utilisateur
                         Picasso.get().load(imageUrl).into(imageViewUser);

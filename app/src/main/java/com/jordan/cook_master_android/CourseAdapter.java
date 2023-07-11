@@ -3,6 +3,7 @@ package com.jordan.cook_master_android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         String originalText = course.getContent();
 
         if (originalText.length() > 30) {
-            String truncatedText = originalText.substring(0, 30);
+            String truncatedText = Html.fromHtml(originalText.substring(0, 30), Html.FROM_HTML_MODE_COMPACT).toString();
             contentTextView.setText(truncatedText + "...");
         }
 
@@ -60,4 +61,5 @@ public class CourseAdapter extends ArrayAdapter<Course> {
 
         return itemView;
     }
+
 }

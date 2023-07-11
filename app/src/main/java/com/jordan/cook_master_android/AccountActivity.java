@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class    AccountActivity extends AppCompatActivity {
     private ImageView imageViewUser;
     private  TextView textViewTotalDiscount;
 
+
     private static final String SHARED_PREFS_NAME = "MySharedPrefs";
 
     @Override
@@ -43,6 +45,22 @@ public class    AccountActivity extends AppCompatActivity {
         textViewEmail = findViewById(R.id.txt_user_email);
         imageViewUser = findViewById(R.id.user_image);
         textViewTotalDiscount = findViewById(R.id.txt_total_discount);
+
+        Button buttonLogout = findViewById(R.id.btn_logout);
+
+        //Logout
+        buttonLogout.setOnClickListener(v -> {
+            // Supprimer l'API key des préférences partagées
+            SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+            preferences.edit().remove("api_key").apply();
+            preferences.edit().remove("subscription_name").apply();
+            preferences.edit().remove("is_finished").apply();
+
+
+            // Rediriger vers l'activité de connexion
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
 
         getUserAccount();
 
@@ -96,7 +114,7 @@ public class    AccountActivity extends AppCompatActivity {
                         // Définir le texte des TextViews avec les informations de l'utilisateur
                         textViewName.setText("Pseudo : " + name);
                         textViewEmail.setText("Email : " + email);
-                        textViewTotalDiscount.setText("Portefeuille: " + total_discount);
+                        textViewTotalDiscount.setText("Portefeuille: " + total_discount + " €");
 
                         // Définir l'image de l'ImageView avec l'image de l'utilisateur
                         Picasso.get().load(imageUrl).into(imageViewUser);
@@ -121,6 +139,7 @@ public class    AccountActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         queue.add(request);
     }
+
 
     private void checkApiKey() {
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);

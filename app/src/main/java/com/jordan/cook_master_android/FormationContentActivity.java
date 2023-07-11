@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -192,7 +193,7 @@ public class FormationContentActivity extends AppCompatActivity {
                         String imageUrl = baseUrl + image;
 
                         formationName.setText(name);
-                        formationDescription.setText(description);
+                        formationDescription.setText(Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT));
                         coursesCount.setText("number of Courses: " + fcoursesCount);
                         Picasso.get().load(imageUrl).into(formationImage);
                         allcourseChecked = true;
@@ -347,6 +348,7 @@ public class FormationContentActivity extends AppCompatActivity {
         RequestQueue checkQueue = Volley.newRequestQueue(this);
         checkQueue.add(checkRequest);
     }
+
 
 
 }

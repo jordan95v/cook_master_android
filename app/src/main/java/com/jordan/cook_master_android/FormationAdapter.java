@@ -1,6 +1,7 @@
 package com.jordan.cook_master_android;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class FormationAdapter extends ArrayAdapter<Formation> {
         titleTextView.setText(formation.getName());
 
         TextView descriptionTextView = itemView.findViewById(R.id.text_description);
-        descriptionTextView.setText(formation.getDescription());
+        descriptionTextView.setText(Html.fromHtml(formation.getDescription(), Html.FROM_HTML_MODE_COMPACT));
 
         ImageView imageView = itemView.findViewById(R.id.image_formation);
         Picasso.get().load(formation.getImage()).into(imageView);
@@ -43,4 +44,5 @@ public class FormationAdapter extends ArrayAdapter<Formation> {
 
         return itemView;
     }
+
 }

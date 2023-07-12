@@ -46,6 +46,11 @@ public class    AccountActivity extends AppCompatActivity {
         imageViewUser = findViewById(R.id.user_image);
         textViewTotalDiscount = findViewById(R.id.txt_total_discount);
 
+
+
+        getUserAccount();
+
+
         Button buttonLogout = findViewById(R.id.btn_logout);
 
         //Logout
@@ -61,8 +66,6 @@ public class    AccountActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
-
-        getUserAccount();
 
         BottomNavigationView navbar = findViewById(R.id.bottom_navigation);
         navbar.setOnItemSelectedListener(item -> {
@@ -104,11 +107,11 @@ public class    AccountActivity extends AppCompatActivity {
                     try {
                         String name = response.getString("name");
                         String email = response.getString("email");
-                        String image = response.getString("image");
+                        String image = response.getString("avatar");
                         int total_discount = response.getInt("total_discount");
 
                         // Construire le chemin d'accès complet de l'image
-                        String baseUrl = "https://kavita.jordan95v.fr/storage/";
+                        String baseUrl = "https://kavita.jordan95v.fr/storage/users-avatar/";
                         String imageUrl = baseUrl + image;
 
                         // Définir le texte des TextViews avec les informations de l'utilisateur

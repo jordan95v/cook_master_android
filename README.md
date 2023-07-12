@@ -17,16 +17,18 @@ Avant d'utiliser cette application, assurez-vous que votre appareil Android rép
 - Version Android : 5.0 (Lollipop) ou version ultérieure.
 - Votre appareil doit disposer d'un support pour la technologie NFC (Near Field Communication).
 
-## Installation
+## Exécution de l'application depuis Android Studio
 
-Suivez les étapes ci-dessous pour installer l'application sur votre appareil Android :
+Pour exécuter l'application depuis Android Studio :
 
-1. Lancez le fichier .APK disponible dans le repo.
-2. Sur votre appareil Android, allez dans les paramètres et activez l'option "Sources inconnues" ou "Installation d'applications depuis des sources inconnues".
-3. À l'aide d'un gestionnaire de fichiers, accédez à l'emplacement où vous avez téléchargé le fichier APK.
-4. Appuyez sur le fichier APK pour lancer l'installation de l'application.
-5. Suivez les instructions à l'écran pour terminer l'installation.
-6. Une fois l'installation terminée, vous pouvez trouver l'application dans le tiroir des applications ou sur l'écran d'accueil de votre appareil Android.
+1. Connectez votre appareil Android à votre ordinateur via un câble USB, ou démarrez un émulateur Android.
+2. Ouvrez le projet dans Android Studio.
+3. Cliquez sur le bouton "Run" dans la barre d'outils supérieure, ou appuyez sur la combinaison de touches "Maj+F10".
+4. Choisissez l'appareil ou l'émulateur cible dans la liste déroulante.
+5. Attendez que Android Studio compile et déploie l'application sur l'appareil ou l'émulateur.
+6. Une fois le processus terminé, l'application se lancera automatiquement sur l'appareil ou l'émulateur.
+
+Assurez-vous que votre projet est configuré correctement et que toutes les dépendances sont résolues avant de lancer l'application.
 
 ## Utilisation
 

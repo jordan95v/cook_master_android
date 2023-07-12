@@ -107,13 +107,13 @@ public class NfcActivity extends AppCompatActivity {
 
     private void getBonus(String content) {
         // Créer l'URL de la requête GET
-        String url = BuildConfig.API_URL + "users/" + content;
+        String url = BuildConfig.API_URL + "user/" + content;
         SharedPreferences preferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String api_key = preferences.getString("api_key", "");
         Map<String, String> headers = new HashMap<>();
         headers.put("API-KEY", api_key);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
                 response -> {
                     Toast.makeText(this, "Bonus récupéré avec succès", Toast.LENGTH_SHORT).show();
                 },
